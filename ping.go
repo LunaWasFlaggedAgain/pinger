@@ -37,6 +37,10 @@ func handshake(ip string, conn *mc.Conn) error {
 }
 
 func Ping(ip string) (*PingList, error) {
+	if !strings.Contains(ip, ":") {
+		ip = ip + ":25565"
+	}
+
 	conn, err := mc.DialMC(ip)
 	if err != nil {
 		return nil, err
