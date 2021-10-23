@@ -23,16 +23,6 @@ type PingList struct {
 	}
 }
 
-func createConn(ip string) (*mc.Conn, error) {
-	conn, err := mc.DialMC(ip)
-
-	if err != nil {
-		return nil, err
-	}
-
-	return conn, nil
-}
-
 func handshake(ip string, conn *mc.Conn) error {
 	// HACK: Get the server's IP
 	ipNoPort := strings.Split(ip, ":")[0]
@@ -47,7 +37,7 @@ func handshake(ip string, conn *mc.Conn) error {
 }
 
 func Ping(ip string) (*PingList, error) {
-	conn, err := createConn(ip)
+	conn, err := mc.DialMC(ip)
 	if err != nil {
 		return nil, err
 	}
@@ -79,8 +69,6 @@ func Ping(ip string) (*PingList, error) {
 
 	var ret PingList
 	err = json.Unmarshal([]byte(str), &ret)
-	if err != nil {
-		return nil, err
-	}
-	return &ret, nil
+
+	return &ret, err
 }
